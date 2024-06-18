@@ -1,8 +1,24 @@
 from scrapers.alberta import *
+from scrapers.albertavotes import *
 import os
 
-def get_bills(keyword):
-    alberta = extalberta(keyword)
+def get_votes():
+    alberta = votescrapte()
+    votes = alberta
+    return votes
+
+def csvfile_vote(filename, votes):
+    downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+    print(downloads_path)
+    file_path = os.path.join(downloads_path, f"{filename}Votes.csv")
+    file = open(file_path, "w", encoding="utf-8-sig")
+    file.write ("Bill_number, Bill_Title, Date_of_Vote, RepName, RepVote, Status, Province\n")
+    for vote in votes:
+        file.write(f"{vote['num']}, {vote['title']}, {vote['Date_of_Vote']},{vote['RepName']}, {vote['RepVote']}, {vote['Result']}, {vote['province']}\n")
+    file.close()
+
+def get_bills():
+    alberta = extalberta()
     bills = alberta
     return bills
 

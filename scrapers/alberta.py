@@ -85,15 +85,15 @@ def extalberta():
             Gov_lv= 'Provincial'
             Jurisdiction = 'Alberta'
             bill_data = {
-            'title': title,
-            'url': url,
-            'RA': RA,
-            'Date_of_Vote': Date_of_vote, 
-            'Status_Reading': Status_reading,
-            'Original': original[:5000],
-            'Summary': summary,
-            'Gov_Level': Gov_lv,
-            'Jurisdiction': Jurisdiction
+                'title': title,
+                'url': url,
+                'RA': RA,
+                'Date_of_Vote': Date_of_vote, 
+                'Status_Reading': Status_reading,
+                'Original': original[:5000],
+                'Summary': summary,
+                'Gov_Level': Gov_lv,
+                'Jurisdiction': Jurisdiction
             }
 
             bills.append(bill_data)
