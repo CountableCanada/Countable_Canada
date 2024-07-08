@@ -15,6 +15,7 @@ def votescrapte ():
                 name = url.get_text()
                 url = url.get('href')
                 votes +=voteCollect(name, url)
+            print("member collected")
     return votes
 
 def voteCollect(name, url):
@@ -34,7 +35,6 @@ def voteCollect(name, url):
             Tit = Title.replace("Bill ", '').split(' ', 1)[0]
             YorN = vote.find("div", class_="col3").find(class_="data").get_text()
             resu = vote.find("div", class_="col4").find(class_="data").get_text()
-            print(RepName) 
             vote_data = {
                 'num': Tit,
                 'title': Title,

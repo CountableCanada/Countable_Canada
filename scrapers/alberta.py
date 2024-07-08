@@ -4,24 +4,36 @@ from openai import OpenAI
 import os
 import PyPDF2
 import re
+import fitz  # PyMuPDF
 
-client = OpenAI(organization="ORGANIZATION KEY", api_key= "APIKEY")
 
-def download_pdf(url, file_path):
+client = OpenAI(organization="org-nT1hd71D6x3Rw1ldZPaZr0oD", api_key= "sk-proj-DYe4XCu7imG7xfpztimQT3BlbkFJ1B16DNk6GsTZqlZrxssK")
+
+
+def download_pdf(url):
     response = requests.get(url)
+    text = ""
     if response.status_code == 200:
-        with open(file_path, 'wb') as file:
-            file.write(response.content)
+        pdf_data = response.content
+        pdf_document = fitz.open(stream=pdf_data, filetype="pdf")
+        for page_num in range(pdf_document.page_count):
+            page = pdf_document.load_page(page_num)
+            text += page.get_text()
+            # print(f"Page {page_num + 1}:")
+            # print(text)
+            # print("\n")
     else:
         print("pdf download failed")
-
-def read_pdf(file_path):
-    with open(file_path, 'rb') as file:
-        reader = PyPDF2.PdfReader(file)
-        text = ""
-        for page in range(1, len(reader.pages) - 1):
-            text += reader.pages[page].extract_text()
+    print("doc downloaded")
     return text
+
+# def read_pdf(file_path):
+#     with open(file_path, 'rb') as file:
+#         reader = PyPDF2.PdfReader(file)
+#         text = ""
+#         for page in range(1, len(reader.pages) - 1):
+#             text += reader.pages[page].extract_text()
+#     return text
 
 def get_summary(keywords):
     response = client.chat.completions.create(
@@ -53,8 +65,8 @@ def extalberta():
             Date_of_vote = None
             RA = None
             local_file_path = "pdf.pdf"
-            download_pdf(url, local_file_path)
-            pdf_text = read_pdf(local_file_path)
+            pdf_text = download_pdf(url)
+            # pdf_text = read_pdf(local_file_path)
             summary = pdf_text.replace(",", " ").replace("\n", " ").replace("\t", " ").replace("\s", " ")
             summary = re.sub(r'[\s\n\t]', ' ', summary)
             original = summary
@@ -66,10 +78,10 @@ def extalberta():
                 summary = get_summary(summary).replace(",", " ").replace("\n", " ").replace("\t", " ").replace("\s", " ")
                 summary = re.sub(r'[\s\n\t]', ' ', summary)
             
-            if os.path.exists(local_file_path):
-                os.remove(local_file_path)
-            else:        
-                print("File error")
+            # if os.path.exists(local_file_path):
+            #     os.remove(local_file_path)
+            # else:        
+            #     print("File error")
             
             for dat in date:
                 if (dat.get('class') is not None and len(dat.get('class')) > 1 and 'b_entry'.__eq__(dat.get('class')[0])):

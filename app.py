@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 from Methods import *
 
-app = Flask('__main__')
+app = Flask(__name__)
 provinces = ["Alberta"]
 
 @app.route('/')
@@ -13,9 +13,11 @@ def download():
     keyword=request.form.get('keyword')
     print(keyword)
     if keyword in provinces:
-        # bills=get_bills()
-        # csvfile(keyword, bills)
+        bills=get_bills()
+        print("Bill data loaded")
+        csvfile(keyword, bills)
         votes=get_votes()
+        print("Votes data loaded")
         csvfile_vote(keyword, votes)
         print(f"{keyword} Data Downloaded!")
     else:
