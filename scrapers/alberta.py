@@ -6,8 +6,11 @@ import PyPDF2
 import re
 import fitz  # PyMuPDF
 
+from dotenv import load_dotenv
 
-client = OpenAI(organization="org-nT1hd71D6x3Rw1ldZPaZr0oD", api_key= "sk-proj-DYe4XCu7imG7xfpztimQT3BlbkFJ1B16DNk6GsTZqlZrxssK")
+load_dotenv()
+
+client = OpenAI(organization=os.environ.get('ORG'), api_key=os.environ.get('AI'))
 
 
 def download_pdf(url):
